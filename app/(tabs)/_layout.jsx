@@ -2,10 +2,15 @@ import { View, Text } from "react-native";
 import React from "react";
 import { Tabs } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
-
+import { Colors } from "./../../constants/Colors";
 export default function Layout() {
   return (
-    <Tabs screenOptions={{ headerShown: false }}>
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: Colors.PRIMARY,
+      }}
+    >
       <Tabs.Screen
         name="home"
         options={{
