@@ -2,6 +2,25 @@ import { ClerkProvider, SignedOut, SignedIn } from "@clerk/clerk-expo";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import LoginScreen from "../components/LoginScreen";
+import * as SecureStore from "expo-secure-store";
+const tokenCache = {
+  async getToken(key) {
+    try {
+      return SecureStore.getItemAsync(key);
+    } catch (error) {
+      console.error("SecureStore Error", error);
+      return null;
+    }
+  },
+
+  async saveToken(key, value) {
+    try {
+      return SecureStore.setItemAsync(key, value);
+    } catch (error) {
+      console.error("SecureStore Error", error);
+    }
+  },
+};
 export default function RootLayout() {
   useFonts({
     "outfit-regular": require("../assets/fonts/Outfit-Regular.ttf"),
@@ -10,6 +29,7 @@ export default function RootLayout() {
   });
   return (
     <ClerkProvider
+      tokenCache={tokenCache}
       publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY}
     >
       <SignedIn>
