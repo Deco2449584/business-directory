@@ -1,4 +1,10 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  useWindowDimensions,
+} from "react-native";
 import React from "react";
 import * as WebBrowser from "expo-web-browser";
 import { Colors } from "./../constants/Colors";
@@ -6,9 +12,11 @@ import { StyleSheet } from "react-native";
 import { useWarmUpBrowser } from "./../hooks/useWarmUpBrowser";
 import { useOAuth } from "@clerk/clerk-expo";
 WebBrowser.maybeCompleteAuthSession();
+
 export default function LoginScreen() {
   useWarmUpBrowser();
   const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
+  const { width, height } = useWindowDimensions();
 
   const onPress = React.useCallback(async () => {
     try {
@@ -24,31 +32,32 @@ export default function LoginScreen() {
       console.error("OAuth error", err);
     }
   }, []);
+
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <View
         style={{
           display: "flex",
           alignItems: "center",
           backgroundColor: "white",
-          marginTop: 100,
+          marginTop: height * 0.1,
         }}
       >
         <Image
           source={require("../assets/images/login.jpg")}
           style={{
-            width: 220,
-            height: 450,
+            width: width * 0.6,
+            height: height * 0.5,
             borderRadius: 20,
             borderWidth: 6,
             borderColor: "black",
           }}
         />
       </View>
-      <View style={styles.subContainer}>
+      <View style={[styles.subContainer, { padding: width * 0.05 }]}>
         <Text
           style={{
-            fontSize: 20,
+            fontSize: width * 0.05,
             fontFamily: "outfit-bold",
             textAlign: "center",
           }}
@@ -66,7 +75,7 @@ export default function LoginScreen() {
         </Text>
         <Text
           style={{
-            fontSize: 15,
+            fontSize: width * 0.04,
             fontFamily: "outfit-regular",
             textAlign: "center",
             marginVertical: 15,
@@ -76,7 +85,10 @@ export default function LoginScreen() {
           Find your favorite business near your and post your own business to
           your community
         </Text>
-        <TouchableOpacity style={styles.btn} onPress={onPress}>
+        <TouchableOpacity
+          style={[styles.btn, { padding: width * 0.04 }]}
+          onPress={onPress}
+        >
           <Text
             style={{
               color: "white",
@@ -95,12 +107,10 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   subContainer: {
     backgroundColor: "#fff",
-    padding: 20,
     marginTop: -20,
   },
   btn: {
     backgroundColor: Colors.PRIMARY,
-    padding: 16,
     borderRadius: 99,
     marginTop: 20,
   },
