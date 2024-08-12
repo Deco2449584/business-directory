@@ -52,7 +52,7 @@ export default function PopularBusiness() {
       <FlatList
         data={businessList}
         horizontal={true}
-        showsHorizontalScrollIndicator={false}
+        showsHorizontalScrollIndicator
         renderItem={({ item, index }) => (
           <View>
             <PopularBusinessCard key={index} business={item} />
