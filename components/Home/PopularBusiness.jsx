@@ -1,23 +1,22 @@
 import { View, Text, FlatList } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Colors } from "../../constants/Colors";
-import { collection, getDocs, query } from "firebase/firestore";
+import { collection, getDocs, limit, query } from "firebase/firestore";
 import { db } from "../../configs/FirebaseConfig";
-import CategoryItem from "./CategoryItem";
-export default function Category() {
-  const [categoryList, setCategoryList] = useState([]);
-
+import { useState } from "react";
+import PopularBusinessCard from "./PopularBusinessCard";
+export default function PopularBusiness() {
+  const [businessList, setBusinessList] = useState([]);
   useEffect(() => {
-    GetCategoryList();
+    GetBusinessList();
   }, []);
-
-  const GetCategoryList = async () => {
-    setCategoryList([]);
-    const q = query(collection(db, "Category"));
+  const GetBusinessList = async () => {
+    setBusinessList([]);
+    const q = query(collection(db, "BusinessList"), limit(10));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
-      setCategoryList((prev) => [...prev, doc.data()]);
-      //console.log(doc.data());
+      console.log(doc.data());
+      setBusinessList((prev) => [...prev, doc.data()]);
     });
   };
 
@@ -39,7 +38,7 @@ export default function Category() {
             fontFamily: "outfit-bold",
           }}
         >
-          Category
+          PopularBusiness
         </Text>
         <Text
           style={{
@@ -51,16 +50,13 @@ export default function Category() {
         </Text>
       </View>
       <FlatList
-        data={categoryList}
+        data={businessList}
         horizontal={true}
-        style={{ marginLeft: 20 }}
         showsHorizontalScrollIndicator={false}
         renderItem={({ item, index }) => (
-          <CategoryItem
-            category={item}
-            key={index}
-            onCategoryPress={(category) => console.log(category)}
-          />
+          <View>
+            <PopularBusinessCard key={index} business={item} />
+          </View>
         )}
       />
     </View>
