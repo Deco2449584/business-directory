@@ -34,7 +34,7 @@ export default function Category() {
         <Text
           style={{
             padding: 10,
-            marginTop: 10,
+            marginRight: 15,
             fontSize: 20,
             fontFamily: "outfit-bold",
           }}
@@ -53,8 +53,14 @@ export default function Category() {
       <FlatList
         data={categoryList}
         horizontal={true}
+        style={{ marginLeft: 20 }}
+        showsHorizontalScrollIndicator={false}
         renderItem={({ item, index }) => (
-          <CategoryItem category={item} key={index} />
+          <CategoryItem
+            category={item}
+            key={index}
+            onCategoryPress={(category) => console.log(category)}
+          />
         )}
       />
     </View>
