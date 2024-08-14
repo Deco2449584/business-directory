@@ -15,7 +15,7 @@ export default function PopularBusiness() {
     const q = query(collection(db, "BusinessList"), limit(10));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
-      console.log(doc.data());
+      //console.log(doc.data());
       setBusinessList((prev) => [...prev, doc.data()]);
     });
   };
@@ -52,7 +52,7 @@ export default function PopularBusiness() {
       <FlatList
         data={businessList}
         horizontal={true}
-        showsHorizontalScrollIndicator
+        showsHorizontalScrollIndicator={false}
         renderItem={({ item, index }) => (
           <View>
             <PopularBusinessCard key={index} business={item} />
