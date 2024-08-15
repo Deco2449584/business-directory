@@ -48,7 +48,6 @@ export default function ActionButton({ business }) {
         backgroundColor: "white",
         padding: 20,
         borderRadius: 10,
-        margin: 20,
       }}
     >
       <FlatList
