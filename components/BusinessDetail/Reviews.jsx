@@ -111,8 +111,9 @@ export default function Reviews({ business }) {
                 {item.userName}
               </Text>
               <Rating
-                ImageSize={10}
+                imageSize={15} // Asegúrate de que la propiedad esté en minúsculas
                 ratingCount={item.rating}
+                readonly={true} // Añadir esta propiedad para que sea de solo lectura
                 style={{ alignItems: "flex-start" }}
               />
               <Text>{item.comment}</Text>
