@@ -8,6 +8,7 @@ import { ActivityIndicator } from "react-native";
 import { Colors } from "../../constants/Colors";
 import ActionButton from "../../components/BusinessDetail/ActionButton";
 import About from "../../components/BusinessDetail/About";
+import Reviews from "../../components/BusinessDetail/Reviews";
 export default function businessDetail() {
   const { businessid } = useLocalSearchParams();
   const [business, setBusiness] = useState();
@@ -21,7 +22,7 @@ export default function businessDetail() {
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       console.log("Document data:", docSnap.data());
-      setBusiness(docSnap.data());
+      setBusiness({ id: docSnap.id, ...docSnap.data() });
       setLoading(false);
     } else {
       console.log("No such document!");
@@ -41,6 +42,7 @@ export default function businessDetail() {
           <Intro business={business} />
           <ActionButton business={business} />
           <About business={business} />
+          <Reviews business={business} />
         </View>
       )}
     </ScrollView>

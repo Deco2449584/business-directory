@@ -7,7 +7,6 @@ export default function About({ business }) {
       style={{
         backgroundColor: "white",
         padding: 20,
-        height: "100%",
         borderRadius: 10,
       }}
     >
