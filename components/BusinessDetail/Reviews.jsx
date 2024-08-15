@@ -105,15 +105,15 @@ export default function Reviews({ business }) {
             >
               <Text
                 style={{
-                  fontFamily: "outfit-medium",
+                  fontFamily: "outfit-bold",
                 }}
               >
                 {item.userName}
               </Text>
               <Rating
-                imageSize={15} // Asegúrate de que la propiedad esté en minúsculas
+                imageSize={15}
                 ratingCount={item.rating}
-                readonly={true} // Añadir esta propiedad para que sea de solo lectura
+                readonly={true}
                 style={{ alignItems: "flex-start" }}
               />
               <Text>{item.comment}</Text>
