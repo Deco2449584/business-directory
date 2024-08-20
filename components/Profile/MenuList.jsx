@@ -1,30 +1,40 @@
-import { View, Text, FlatList, Image } from "react-native";
+import { View, Text, FlatList, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import { Colors } from "../../constants/Colors";
+import { useRouter } from "expo-router";
 export default function MenuList() {
   const menuList = [
     {
       id: 1,
       name: "Add Business",
       icon: require("../../assets/images/businessAdd.png"),
+      path: "/business/add-business",
     },
     {
       id: 2,
       name: "My Business",
       icon: require("../../assets/images/business.png"),
+      path: "",
     },
     {
       id: 3,
       name: "Shared App",
       icon: require("../../assets/images/sharing.png"),
+      path: "",
     },
 
     {
       id: 4,
       name: "Logout",
       icon: require("../../assets/images/logout.png"),
+      path: "",
     },
   ];
+  const router = useRouter();
+
+  const onMenuClick = (item) => {
+    router.push(item.path);
+  };
   return (
     <View
       style={{
@@ -35,7 +45,10 @@ export default function MenuList() {
         data={menuList}
         numColumns={2}
         renderItem={({ item, index }) => (
-          <View
+          <TouchableOpacity
+            onPress={() => {
+              onMenuClick(item);
+            }}
             style={{
               display: "flex",
               flexDirection: "row",
@@ -66,7 +79,7 @@ export default function MenuList() {
             >
               {item.name}
             </Text>
-          </View>
+          </TouchableOpacity>
         )}
       />
       <Text
