@@ -1,9 +1,46 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  Alert,
+  ToastAndroid,
+} from "react-native";
 import React from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
+import { deleteDoc, doc } from "firebase/firestore";
+import { db } from "../../configs/FirebaseConfig";
+import { useUser } from "@clerk/clerk-expo";
+
 export default function Intro({ business }) {
   const router = useRouter();
+  const { user, isLoaded } = useUser();
+
+  const onDelete = () => {
+    Alert.alert(
+      "Confirmación",
+      "Are you sure you want to delete this business?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: () => deleteBusiness(),
+        },
+      ]
+    );
+  };
+
+  const deleteBusiness = async () => {
+    await deleteDoc(doc(db, "BusinessList", business?.id));
+    router.back();
+    ToastAndroid.show("Business deleted successfully", ToastAndroid.LONG);
+  };
+
   return (
     <View>
       <View
@@ -28,9 +65,12 @@ export default function Intro({ business }) {
       />
       <View
         style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          backgroundColor: "white",
           padding: 20,
           marginTop: -20,
-          backgroundColor: "white",
           borderTopLeftRadius: 25,
           borderTopRightRadius: 25,
           shadowColor: "#000",
@@ -40,12 +80,25 @@ export default function Intro({ business }) {
           },
         }}
       >
-        <Text style={{ fontSize: 26, fontFamily: "outfit-bold" }}>
-          {business?.name}
-        </Text>
-        <Text style={{ fontSize: 18, fontFamily: "outfit-regular" }}>
-          {business?.address}
-        </Text>
+        <View style={{}}>
+          <Text
+            style={{
+              fontSize: 26,
+              fontFamily: "outfit-bold",
+            }}
+          >
+            {business?.name}
+          </Text>
+          <Text style={{ fontSize: 18, fontFamily: "outfit-regular" }}>
+            {business?.address}
+          </Text>
+        </View>
+        {isLoaded &&
+          user?.primaryEmailAddress?.emailAddress === business?.userEmail && (
+            <TouchableOpacity onPress={onDelete}>
+              <Ionicons name="trash" size={32} color="purple" />
+            </TouchableOpacity>
+          )}
       </View>
     </View>
   );

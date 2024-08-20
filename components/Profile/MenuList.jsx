@@ -1,8 +1,17 @@
-import { View, Text, FlatList, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  Share,
+} from "react-native";
 import React from "react";
 import { Colors } from "../../constants/Colors";
 import { useRouter } from "expo-router";
+import { useAuth } from "@clerk/clerk-expo";
 export default function MenuList() {
+  const { signOut } = useAuth();
   const menuList = [
     {
       id: 1,
@@ -14,25 +23,36 @@ export default function MenuList() {
       id: 2,
       name: "My Business",
       icon: require("../../assets/images/business.png"),
-      path: "",
+      path: "/business/my-business",
     },
     {
       id: 3,
       name: "Shared App",
       icon: require("../../assets/images/sharing.png"),
-      path: "",
+      path: "shared",
     },
 
     {
       id: 4,
       name: "Logout",
       icon: require("../../assets/images/logout.png"),
-      path: "",
+      path: "logout",
     },
   ];
   const router = useRouter();
 
   const onMenuClick = (item) => {
+    if (item.path === "logout") {
+      signOut();
+      return;
+    }
+    if (item.path === "shared") {
+      Share.share({
+        message: "Download this app from this link",
+        url: "https://play.google.com/store/apps/details?id=com.danielcaro.businessapp",
+      });
+      return;
+    }
     router.push(item.path);
   };
   return (
