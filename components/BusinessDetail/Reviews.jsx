@@ -12,7 +12,7 @@ import { Colors } from "../../constants/Colors";
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { useUser } from "@clerk/clerk-expo";
 import { db } from "../../configs/FirebaseConfig";
-export default function Reviews({ business }) {
+export default function Reviews({ business, onReviewSubmit }) {
   const [rating, setRating] = useState(4);
   const [userImput, setUserInput] = useState();
   const { user } = useUser();
@@ -28,6 +28,7 @@ export default function Reviews({ business }) {
       }),
     });
     ToastAndroid.show("Review submitted", ToastAndroid.BOTTOM);
+    onReviewSubmit();
   };
   return (
     <View

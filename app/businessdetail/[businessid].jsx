@@ -1,7 +1,7 @@
 import { View, Text, ScrollView } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Intro from "../../components/BusinessDetail/Intro";
-import { useLocalSearchParams } from "expo-router";
+import { useFocusEffect, useLocalSearchParams } from "expo-router";
 import { db } from "../../configs/FirebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 import { ActivityIndicator } from "react-native";
@@ -13,6 +13,8 @@ export default function businessDetail() {
   const { businessid } = useLocalSearchParams();
   const [business, setBusiness] = useState();
   const [loading, setLoading] = useState(false);
+  const [refresh, setRefresh] = useState(false);
+
   useEffect(() => {
     getBusinessDetailById();
   }, []);
@@ -29,6 +31,14 @@ export default function businessDetail() {
       setLoading(false);
     }
   };
+  useFocusEffect(
+    useCallback(() => {
+      getBusinessDetailById();
+    }, [refresh])
+  );
+  const handleRefresh = () => {
+    setRefresh(!refresh);
+  };
   return (
     <ScrollView>
       {loading ? (
@@ -42,7 +52,7 @@ export default function businessDetail() {
           <Intro business={business} />
           <ActionButton business={business} />
           <About business={business} />
-          <Reviews business={business} />
+          <Reviews business={business} onReviewSubmit={handleRefresh} />
         </View>
       )}
     </ScrollView>
