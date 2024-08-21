@@ -1,15 +1,26 @@
 import { View, Text, TextInput } from "react-native";
-import React from "react";
+import React, { useState, useCallback } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "../../constants/Colors";
 import Category from "../../components/Home/Category";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../configs/FirebaseConfig";
 import ExploreBusinessList from "../../components/Explore/ExploreBusinessList";
-import { useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function Explore() {
   const [businessList, setBusinessList] = useState([]);
+  const [searchText, setSearchText] = useState("");
+
+  const GetAllBusiness = async () => {
+    const q = query(collection(db, "BusinessList"));
+    const querySnapshot = await getDocs(q);
+    const allBusiness = [];
+    querySnapshot.forEach((doc) => {
+      allBusiness.push({ id: doc.id, ...doc.data() });
+    });
+    setBusinessList(allBusiness);
+  };
 
   const GetBusinessByCategory = async (category) => {
     setBusinessList([]);
@@ -22,6 +33,25 @@ export default function Explore() {
       setBusinessList((prev) => [...prev, { id: doc.id, ...doc.data() }]);
     });
   };
+
+  const filterBusinessList = (text) => {
+    setSearchText(text);
+    if (text === "") {
+      GetAllBusiness();
+    } else {
+      const filteredList = businessList.filter((business) =>
+        business.name.toLowerCase().includes(text.toLowerCase())
+      );
+      setBusinessList(filteredList);
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      GetAllBusiness();
+    }, [])
+  );
+
   return (
     <View
       style={{
@@ -53,6 +83,8 @@ export default function Explore() {
         <Ionicons name="search" size={24} color={Colors.PRIMARY} />
         <TextInput
           placeholder="Search..."
+          value={searchText}
+          onChangeText={filterBusinessList}
           style={{
             flex: 1,
             marginLeft: 20,
