@@ -1,7 +1,6 @@
 import {
   View,
   Text,
-  FlatList,
   Image,
   TouchableOpacity,
   Linking,
@@ -37,8 +36,9 @@ export default function ActionButton({ business }) {
       url: business?.website,
     },
   ];
+
   const OnPressHandle = (item) => {
-    if (item.name == "Share") {
+    if (item.name === "Share") {
       Share.share({
         message:
           business?.name +
@@ -53,6 +53,7 @@ export default function ActionButton({ business }) {
     }
     Linking.openURL(item.url);
   };
+
   return (
     <View
       style={{
@@ -61,12 +62,9 @@ export default function ActionButton({ business }) {
         borderRadius: 10,
       }}
     >
-      <FlatList
-        data={actionButtonMenu}
-        numColumns={4}
-        columnWrapperStyle={{ justifyContent: "space-between" }}
-        renderItem={({ item, index }) => (
-          <TouchableOpacity onPress={() => OnPressHandle(item)}>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        {actionButtonMenu.map((item) => (
+          <TouchableOpacity key={item.id} onPress={() => OnPressHandle(item)}>
             <Image source={item.icon} style={{ width: 50, height: 50 }} />
             <Text
               style={{
@@ -78,8 +76,8 @@ export default function ActionButton({ business }) {
               {item.name}
             </Text>
           </TouchableOpacity>
-        )}
-      />
+        ))}
+      </View>
     </View>
   );
 }

@@ -38,7 +38,7 @@ export default function PopularBusiness() {
             fontFamily: "outfit-bold",
           }}
         >
-          PopularBusiness
+          #PopularBusiness
         </Text>
         <Text
           style={{

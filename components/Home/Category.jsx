@@ -35,6 +35,7 @@ export default function Category({ explore = false, onCategorySelect }) {
         <View
           style={{
             display: "flex",
+            padding: 20,
             flexDirection: "row",
             justifyContent: "space-between",
           }}
@@ -47,7 +48,7 @@ export default function Category({ explore = false, onCategorySelect }) {
               fontFamily: "outfit-bold",
             }}
           >
-            Category
+            #Categorys
           </Text>
           <Text
             style={{
