@@ -4,7 +4,7 @@ import BusinessListCard from "./BusinessListCard";
 
 export default function ExploreBusinessList({ businessList }) {
   return (
-    <ScrollView>
+    <View>
       <FlatList
         style={{
           marginTop: 10,
@@ -21,6 +21,6 @@ export default function ExploreBusinessList({ businessList }) {
           height: 200,
         }}
       ></View>
-    </ScrollView>
+    </View>
   );
 }

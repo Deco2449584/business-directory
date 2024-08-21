@@ -8,8 +8,9 @@ import { db } from "../../configs/FirebaseConfig";
 import ExploreBusinessList from "../../components/Explore/ExploreBusinessList";
 import { useState } from "react";
 
-export default function explore() {
+export default function Explore() {
   const [businessList, setBusinessList] = useState([]);
+
   const GetBusinessByCategory = async (category) => {
     setBusinessList([]);
     const q = query(
@@ -24,8 +25,8 @@ export default function explore() {
   return (
     <View
       style={{
-        paddingHorizontal: 10,
-        paddingTop: 20,
+        marginTop: 20,
+        padding: 20,
       }}
     >
       <Text
@@ -40,6 +41,7 @@ export default function explore() {
         style={{
           flexDirection: "row",
           alignItems: "center",
+          padding: 5,
           marginTop: 20,
           marginBottom: 20,
           backgroundColor: "#fff",
@@ -53,7 +55,7 @@ export default function explore() {
           placeholder="Search..."
           style={{
             flex: 1,
-            marginLeft: 10,
+            marginLeft: 20,
             height: 40,
             fontFamily: "outfit-medium",
             fontSize: 16,
