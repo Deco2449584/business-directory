@@ -82,6 +82,7 @@ export default function Reviews({ business, onReviewSubmit }) {
       <View>
         {business?.reviews?.map((item, index) => (
           <View
+            key={index}
             style={{
               display: "flex",
               flexDirection: "row",

@@ -60,7 +60,11 @@ export default function Intro({ business }) {
         <Ionicons name="heart-outline" size={40} color="black" />
       </View>
       <Image
-        source={{ uri: business?.imageUrl }}
+        source={
+          business?.imageUrl
+            ? { uri: business.imageUrl }
+            : require("../../assets/images/placeholder.png")
+        }
         style={{ height: 200, width: "100%" }}
       />
       <View
