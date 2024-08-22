@@ -4,7 +4,6 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
-  ScrollView,
   ToastAndroid,
   ActivityIndicator,
 } from "react-native";
@@ -12,11 +11,12 @@ import React, { useEffect, useState } from "react";
 import { useNavigation } from "expo-router";
 import { Colors } from "../../constants/Colors";
 import * as ImagePicker from "expo-image-picker";
-import RNPickerSelect from "react-native-picker-select";
 import { db, storage } from "../../configs/FirebaseConfig";
 import { collection, getDocs, query, setDoc, doc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useUser } from "@clerk/clerk-expo";
+import DropDownPicker from "react-native-dropdown-picker";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function AddBusiness() {
   const navigation = useNavigation();
@@ -30,11 +30,29 @@ export default function AddBusiness() {
   const [about, setAbout] = useState("");
   const [category, setCategory] = useState("");
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     navigation.setOptions({
       headerTitle: "Add New Business",
       headerShown: true,
+      headerTitleStyle: {
+        fontFamily: "outfit-bold",
+        fontSize: 25,
+        color: "white",
+      },
+      headerStyle: {
+        backgroundColor: Colors.PRIMARY,
+      },
+      headerLeft: () => (
+        <Ionicons
+          name="arrow-back"
+          size={30}
+          color="white"
+          style={{ padding: 20 }}
+          onPress={() => navigation.goBack()}
+        />
+      ),
     });
     GetCategoryList();
   }, []);
@@ -103,7 +121,7 @@ export default function AddBusiness() {
   };
 
   return (
-    <ScrollView
+    <View
       style={{
         padding: 20,
         flex: 1,
@@ -236,20 +254,24 @@ export default function AddBusiness() {
         />
       </View>
 
-      <View
-        style={{
-          borderWidth: 1,
-          borderRadius: 5,
-          fontSize: 17,
-          backgroundColor: "white",
-          marginTop: 10,
-          borderColor: Colors.PRIMARY,
-          fontFamily: "outfit-regular",
-        }}
-      >
-        <RNPickerSelect
-          onValueChange={(value) => setCategory(value)}
+      <View>
+        <DropDownPicker
+          open={open}
+          value={category}
           items={categoryList}
+          setOpen={setOpen}
+          setValue={setCategory}
+          setItems={setCategoryList}
+          placeholder="Select a category"
+          style={{
+            borderWidth: 1,
+            borderRadius: 5,
+            fontSize: 17,
+            backgroundColor: "white",
+            marginTop: 10,
+            borderColor: Colors.PRIMARY,
+            fontFamily: "outfit-regular",
+          }}
         />
       </View>
 
@@ -282,6 +304,6 @@ export default function AddBusiness() {
           height: 100,
         }}
       ></View>
-    </ScrollView>
+    </View>
   );
 }
