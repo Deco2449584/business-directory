@@ -11,6 +11,7 @@ import { useFocusEffect } from "@react-navigation/native";
 export default function Explore() {
   const [businessList, setBusinessList] = useState([]);
   const [searchText, setSearchText] = useState("");
+  const [noBusinessMessage, setNoBusinessMessage] = useState(false);
 
   const GetAllBusiness = async () => {
     const q = query(collection(db, "BusinessList"));
@@ -20,6 +21,7 @@ export default function Explore() {
       allBusiness.push({ id: doc.id, ...doc.data() });
     });
     setBusinessList(allBusiness);
+    setNoBusinessMessage(allBusiness.length === 0);
   };
 
   const GetBusinessByCategory = async (category) => {
@@ -29,9 +31,12 @@ export default function Explore() {
       where("category", "==", category)
     );
     const querySnapshot = await getDocs(q);
+    const businesses = [];
     querySnapshot.forEach((doc) => {
-      setBusinessList((prev) => [...prev, { id: doc.id, ...doc.data() }]);
+      businesses.push({ id: doc.id, ...doc.data() });
     });
+    setBusinessList(businesses);
+    setNoBusinessMessage(businesses.length === 0);
   };
 
   const filterBusinessList = (text) => {
@@ -43,6 +48,7 @@ export default function Explore() {
         business.name.toLowerCase().includes(text.toLowerCase())
       );
       setBusinessList(filteredList);
+      setNoBusinessMessage(filteredList.length === 0);
     }
   };
 
@@ -100,8 +106,21 @@ export default function Explore() {
         onCategorySelect={(category) => GetBusinessByCategory(category)}
       />
       {/*Business List*/}
-
-      <ExploreBusinessList businessList={businessList} />
+      {noBusinessMessage ? (
+        <Text
+          style={{
+            textAlign: "center",
+            marginTop: 20,
+            fontSize: 20,
+            fontFamily: "outfit-bold",
+            color: Colors.GRAY,
+          }}
+        >
+          No business found in this category
+        </Text>
+      ) : (
+        <ExploreBusinessList businessList={businessList} />
+      )}
     </View>
   );
 }

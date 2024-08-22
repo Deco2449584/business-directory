@@ -5,21 +5,40 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../configs/FirebaseConfig";
 import BusinessListCard from "../../components/BusinessList/BusinessListCard";
 import { Colors } from "../../constants/Colors";
+import { Ionicons } from "@expo/vector-icons";
+
 export default function BusinessListByCategory() {
   const navigation = useNavigation();
   const { category } = useLocalSearchParams();
   const [businessList, setBusinessList] = useState([]);
   const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     navigation.setOptions({
       headerShown: true,
       headerTitle: category,
+      headerTitleStyle: {
+        fontFamily: "outfit-bold",
+        fontSize: 25,
+        color: "white",
+      },
+      headerStyle: {
+        backgroundColor: Colors.PRIMARY,
+      },
+      headerLeft: () => (
+        <Ionicons
+          name="arrow-back"
+          size={30}
+          color="white"
+          style={{ padding: 20 }}
+          onPress={() => navigation.goBack()}
+        />
+      ),
     });
     getBusinessList();
   }, []);
 
   const getBusinessList = async () => {
-    // Fetch business list by category
     setLoading(true);
     const q = query(
       collection(db, "BusinessList"),
@@ -27,15 +46,24 @@ export default function BusinessListByCategory() {
     );
     const querySnapshot = await getDocs(q);
 
+    const businesses = [];
     querySnapshot.forEach((doc) => {
-      //console.log(doc.data());
-      setBusinessList((prev) => [...prev, { id: doc.id, ...doc.data() }]);
-      setLoading(false);
+      businesses.push({ id: doc.id, ...doc.data() });
     });
+
+    setBusinessList(businesses);
+    setLoading(false);
   };
+
   return (
     <View>
-      {businessList?.length > 0 && loading == false ? (
+      {loading ? (
+        <ActivityIndicator
+          style={{ marginTop: "60%" }}
+          size="large"
+          color={Colors.PRIMARY}
+        />
+      ) : businessList.length > 0 ? (
         <FlatList
           data={businessList}
           onRefresh={getBusinessList}
@@ -43,12 +71,6 @@ export default function BusinessListByCategory() {
           renderItem={({ item, index }) => (
             <BusinessListCard business={item} key={index} />
           )}
-        />
-      ) : loading ? (
-        <ActivityIndicator
-          style={{ marginTop: "60%" }}
-          size="large"
-          color={Colors.PRIMARY}
         />
       ) : (
         <Text

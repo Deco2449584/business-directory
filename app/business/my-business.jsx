@@ -6,6 +6,7 @@ import { useUser } from "@clerk/clerk-react";
 import BusinessListCard from "../../components/BusinessList/BusinessListCard";
 import { useNavigation } from "expo-router";
 import { Colors } from "../../constants/Colors";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function MyBusiness() {
   const { user } = useUser();
@@ -17,9 +18,23 @@ export default function MyBusiness() {
     navigation.setOptions({
       headerShown: true,
       title: "My Business",
+      headerTitleStyle: {
+        fontFamily: "outfit-bold",
+        fontSize: 25,
+        color: "white",
+      },
       headerStyle: {
         backgroundColor: Colors.PRIMARY,
       },
+      headerLeft: () => (
+        <Ionicons
+          name="arrow-back"
+          size={30}
+          color="white"
+          style={{ padding: 20 }}
+          onPress={() => navigation.goBack()}
+        />
+      ),
     });
     if (user) {
       GetUserBusiness();
@@ -58,15 +73,6 @@ export default function MyBusiness() {
         flex: 1,
       }}
     >
-      <Text
-        style={{
-          fontFamily: "outfit-bold",
-          fontSize: 30,
-        }}
-      >
-        My Business
-      </Text>
-
       {loading ? (
         <ActivityIndicator size="large" color={Colors.PRIMARY} />
       ) : (
