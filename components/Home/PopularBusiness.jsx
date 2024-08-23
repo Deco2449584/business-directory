@@ -1,11 +1,14 @@
-import { View, Text, FlatList } from "react-native";
+import { View, Text, FlatList, TouchableOpacity } from "react-native";
 import React, { useEffect } from "react";
 import { Colors } from "../../constants/Colors";
 import { collection, getDocs, limit, query } from "firebase/firestore";
 import { db } from "../../configs/FirebaseConfig";
 import { useState } from "react";
 import PopularBusinessCard from "./PopularBusinessCard";
+import { useRouter } from "expo-router";
 export default function PopularBusiness() {
+  const router = useRouter();
+
   const [businessList, setBusinessList] = useState([]);
   useEffect(() => {
     GetBusinessList();
@@ -40,14 +43,19 @@ export default function PopularBusiness() {
         >
           #PopularBusiness
         </Text>
-        <Text
-          style={{
-            color: Colors.PRIMARY,
-            fontFamily: "outfit-medium",
-          }}
+
+        <TouchableOpacity
+          onPress={() => router.push("businesslist/AllBusinessList")}
         >
-          View All
-        </Text>
+          <Text
+            style={{
+              color: Colors.PRIMARY,
+              fontFamily: "outfit-medium",
+            }}
+          >
+            View All
+          </Text>
+        </TouchableOpacity>
       </View>
       <FlatList
         data={businessList}

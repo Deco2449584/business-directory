@@ -1,4 +1,10 @@
-import { View, Text, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  Touchable,
+  TouchableOpacity,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { Colors } from "../../constants/Colors";
 import { collection, getDocs, query } from "firebase/firestore";
@@ -50,14 +56,19 @@ export default function Category({ explore = false, onCategorySelect }) {
           >
             #Categories
           </Text>
-          <Text
-            style={{
-              color: Colors.PRIMARY,
-              fontFamily: "outfit-medium",
-            }}
+
+          <TouchableOpacity
+            onPress={() => router.push("businesslist/AllBusinessList")}
           >
-            View All
-          </Text>
+            <Text
+              style={{
+                color: Colors.PRIMARY,
+                fontFamily: "outfit-medium",
+              }}
+            >
+              View All
+            </Text>
+          </TouchableOpacity>
         </View>
       )}
       <FlatList
