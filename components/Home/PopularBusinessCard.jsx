@@ -2,8 +2,18 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import { Colors } from "../../constants/Colors";
 import { useRouter } from "expo-router";
+import { Rating } from "react-native-ratings";
 
 export default function PopularBusinessCard({ business }) {
+  // Calcula el promedio de rating
+  // Calcula el promedio de rating
+  const averageRating =
+    business.reviews && business.reviews.length > 0
+      ? (
+          business.reviews.reduce((sum, review) => sum + review.rating, 0) /
+          business.reviews.length
+        ).toFixed(1)
+      : 0;
   const router = useRouter();
   return (
     <TouchableOpacity
@@ -56,18 +66,21 @@ export default function PopularBusinessCard({ business }) {
               flexDirection: "row",
             }}
           >
-            <Image
-              source={require("../../assets/images/star.png")}
-              style={{ width: 15, height: 15 }}
+            <Rating
+              imageSize={15}
+              startingValue={parseFloat(averageRating)}
+              readonly={true}
+              style={{ alignItems: "flex-start" }}
             />
             <Text
               style={{
                 fontFamily: "outfit-regular",
                 fontSize: 13,
                 color: Colors.GRAY,
+                marginLeft: 10,
               }}
             >
-              4.5
+              {parseFloat(averageRating)}
             </Text>
           </View>
           <Text

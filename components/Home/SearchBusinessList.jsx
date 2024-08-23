@@ -35,7 +35,6 @@ const SearchBusinessList = ({ searchText }) => {
       businessList.push({ id: doc.id, ...doc.data() });
     });
     setBusinesses(businessList);
-    setFilteredBusinesses(businessList);
   };
 
   // Función para manejar la búsqueda utilizando Fuse.js
@@ -43,7 +42,7 @@ const SearchBusinessList = ({ searchText }) => {
     if (text) {
       const fuse = new Fuse(businesses, {
         keys: ["name"],
-        threshold: 0.9,
+        threshold: 0.3,
       });
       const result = fuse.search(text);
       const filtered = result.map(({ item }) => item);
@@ -58,8 +57,10 @@ const SearchBusinessList = ({ searchText }) => {
     // Calcula el promedio de rating
     const averageRating =
       item.reviews && item.reviews.length > 0
-        ? item.reviews.reduce((sum, review) => sum + review.rating, 0) /
-          item.reviews.length
+        ? (
+            item.reviews.reduce((sum, review) => sum + review.rating, 0) /
+            item.reviews.length
+          ).toFixed(1)
         : 0;
     return (
       <TouchableOpacity
@@ -87,8 +88,8 @@ const SearchBusinessList = ({ searchText }) => {
             </Text>
             <Text style={{ color: Colors.GRAY }}>{item.address}</Text>
             <Rating
-              imageSize={15}
-              startingValue={averageRating}
+              imageSize={10}
+              startingValue={parseFloat(averageRating)}
               readonly={true}
               style={{ alignItems: "flex-start" }}
             />
@@ -113,7 +114,7 @@ const SearchBusinessList = ({ searchText }) => {
     );
   };
 
-  // Renderiza la lista de negocios filtrados
+  // Renderiza la lista de negocios filtrados solo si hay texto en la búsqueda
   return (
     <View
       style={{
@@ -125,12 +126,14 @@ const SearchBusinessList = ({ searchText }) => {
         zIndex: 1,
       }}
     >
-      <FlatList
-        data={filteredBusinesses}
-        keyExtractor={(item) => item.id}
-        renderItem={renderBusinessCard}
-        contentContainerStyle={{ padding: 20 }}
-      />
+      {filteredBusinesses.length > 0 && (
+        <FlatList
+          data={filteredBusinesses}
+          keyExtractor={(item) => item.id}
+          renderItem={renderBusinessCard}
+          contentContainerStyle={{ padding: 20 }}
+        />
+      )}
     </View>
   );
 };
