@@ -1,11 +1,13 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import { useUser } from "@clerk/clerk-expo";
 import { Colors } from "../../constants/Colors";
 import SearchBar from "./SearchBar";
 import SearchBusinessList from "./SearchBusinessList";
+import { useRouter } from "expo-router";
 
 export default function Header() {
+  const router = useRouter();
   const { user } = useUser();
   const [searchText, setSearchText] = useState("");
 
@@ -26,14 +28,17 @@ export default function Header() {
             gap: 10,
           }}
         >
-          <Image
-            source={{ uri: user?.imageUrl }}
-            style={{
-              width: 45,
-              height: 45,
-              borderRadius: 99,
-            }}
-          />
+          <TouchableOpacity onPress={() => router.push("/(tabs)/profile")}>
+            <Image
+              source={{ uri: user?.imageUrl }}
+              style={{
+                width: 45,
+                height: 45,
+                borderRadius: 99,
+              }}
+            />
+          </TouchableOpacity>
+
           <View>
             <Text style={{ color: "#fff" }}>Welcome,</Text>
             <Text
