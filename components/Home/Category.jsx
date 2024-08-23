@@ -48,7 +48,7 @@ export default function Category({ explore = false, onCategorySelect }) {
               fontFamily: "outfit-bold",
             }}
           >
-            #Categorys
+            #Categories
           </Text>
           <Text
             style={{

@@ -6,6 +6,7 @@ import {
   TextInput,
   ToastAndroid,
   ActivityIndicator,
+  ScrollView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "expo-router";
@@ -121,7 +122,7 @@ export default function AddBusiness() {
   };
 
   return (
-    <View
+    <ScrollView
       style={{
         padding: 20,
         flex: 1,
@@ -304,6 +305,6 @@ export default function AddBusiness() {
           height: 100,
         }}
       ></View>
-    </View>
+    </ScrollView>
   );
 }
