@@ -43,7 +43,7 @@ const SearchBusinessList = ({ searchText }) => {
     if (text) {
       const fuse = new Fuse(businesses, {
         keys: ["name"],
-        threshold: 0.2,
+        threshold: 0.9,
       });
       const result = fuse.search(text);
       const filtered = result.map(({ item }) => item);
@@ -54,55 +54,64 @@ const SearchBusinessList = ({ searchText }) => {
   };
 
   // Función para renderizar cada tarjeta de negocio
-  const renderBusinessCard = ({ item }) => (
-    <TouchableOpacity
-      onPress={() => router.push("/businessdetail/" + item?.id)}
-    >
-      <View
-        style={{
-          backgroundColor: "rgba(255, 255, 255, 1)",
-          borderRadius: 10,
-          padding: 15,
-          marginBottom: 5,
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.1,
-          shadowRadius: 5,
-          elevation: 3,
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
-        }}
+  const renderBusinessCard = ({ item }) => {
+    // Calcula el promedio de rating
+    const averageRating =
+      item.reviews && item.reviews.length > 0
+        ? item.reviews.reduce((sum, review) => sum + review.rating, 0) /
+          item.reviews.length
+        : 0;
+    return (
+      <TouchableOpacity
+        onPress={() => router.push("/businessdetail/" + item?.id)}
       >
-        <View>
-          <Text style={{ fontSize: 18, fontWeight: "bold" }}>{item.name}</Text>
-          <Text style={{ color: Colors.GRAY }}>{item.address}</Text>
-          <Rating
-            imageSize={15}
-            ratingCount={item.Rating}
-            readonly={true}
-            style={{ alignItems: "flex-start" }}
-          />
+        <View
+          style={{
+            backgroundColor: "rgba(255, 255, 255, 1)",
+            borderRadius: 10,
+            padding: 15,
+            marginBottom: 5,
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 5,
+            elevation: 3,
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <View>
+            <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+              {item.name}
+            </Text>
+            <Text style={{ color: Colors.GRAY }}>{item.address}</Text>
+            <Rating
+              imageSize={15}
+              startingValue={averageRating}
+              readonly={true}
+              style={{ alignItems: "flex-start" }}
+            />
+          </View>
+          <View>
+            <Image
+              source={{ uri: item.imageUrl }}
+              style={{
+                height: 50,
+                width: 80,
+                borderRadius: 10,
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.1,
+                shadowRadius: 5,
+                elevation: 3,
+              }}
+            />
+          </View>
         </View>
-        <View>
-          <Image
-            source={{ uri: item.imageUrl }}
-            style={{
-              height: 50,
-              width: 100,
-              padding: 10,
-              borderRadius: 10,
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.1,
-              shadowRadius: 5,
-              elevation: 3,
-            }}
-          />
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
+      </TouchableOpacity>
+    );
+  };
 
   // Renderiza la lista de negocios filtrados
   return (

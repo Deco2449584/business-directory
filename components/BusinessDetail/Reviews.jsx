@@ -14,14 +14,15 @@ import { useUser } from "@clerk/clerk-expo";
 import { db } from "../../configs/FirebaseConfig";
 export default function Reviews({ business, onReviewSubmit }) {
   const [rating, setRating] = useState(4);
-  const [userImput, setUserInput] = useState();
+  const [userInput, setUserInput] = useState();
   const { user } = useUser();
-  const onsSubmit = async () => {
+
+  const onSubmit = async () => {
     const docRef = doc(db, "BusinessList", business?.id);
     await updateDoc(docRef, {
       reviews: arrayUnion({
         rating: rating,
-        comment: userImput,
+        comment: userInput,
         userName: user?.fullName,
         userImage: user?.imageUrl,
         userEmail: user?.primaryEmailAddress.emailAddress,
@@ -56,10 +57,10 @@ export default function Reviews({ business, onReviewSubmit }) {
             justifyContent: "flex-start",
             textAlignVertical: "top",
           }}
-        ></TextInput>
+        />
         <TouchableOpacity
-          disabled={!userImput}
-          onPress={() => onsSubmit()}
+          disabled={!userInput}
+          onPress={() => onSubmit()}
           style={{
             backgroundColor: Colors.PRIMARY,
             padding: 10,
@@ -114,7 +115,7 @@ export default function Reviews({ business, onReviewSubmit }) {
               </Text>
               <Rating
                 imageSize={15}
-                ratingCount={item.rating}
+                startingValue={item.rating}
                 readonly={true}
                 style={{ alignItems: "flex-start" }}
               />
